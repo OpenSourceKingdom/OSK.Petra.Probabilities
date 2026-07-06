@@ -1,6 +1,3 @@
-using OSK.Hexagonal.MetaData;
-using System;
-
 namespace OSK.Petra.Probabilities.Ports;
 
 /// <summary>
@@ -20,5 +17,5 @@ public interface IRandomNumberGenerator
     /// <param name="min">The min value</param>
     /// <param name="max">The max value</param>
     /// <returns>A value between min/max inclusive</returns>
-    int Next(int min, int max);
+    int NextInteger(int min, int max);
 }

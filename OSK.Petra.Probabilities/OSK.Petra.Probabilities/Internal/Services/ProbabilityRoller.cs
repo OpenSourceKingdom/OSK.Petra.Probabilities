@@ -1,7 +1,4 @@
 using OSK.Petra.Probabilities.Ports;
-using OSK.Petra.Probabilities.RNG;
-using OSK.Petra.Probabilities.RNG.Pseudo;
-using System;
 
 namespace OSK.Petra.Probabilities.Internal.Services;
 
@@ -9,11 +6,14 @@ internal class ProbabilityRoller(IRandomNumberGenerator numberGenerator) : IProb
 {
     #region IProbabilityRoller
 
-    public bool Chance(double probability)
-        => numberGenerator.NextDouble() <= probability;
+    public bool RollCheck(double minChance, double maxChance, double probabilityRequired)
+        => numberGenerator.NextDouble(minChance, maxChance) >= probabilityRequired;
 
     public int Roll(int min, int max)
-        => numberGenerator.Next(min, max);
+        => numberGenerator.NextInteger(min, max);
+
+    public double Roll(double min, double max)
+        => numberGenerator.NextDouble(min, max);
 
     #endregion
 }

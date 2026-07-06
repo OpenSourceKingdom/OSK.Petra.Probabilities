@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 		<LangVersion>12</LangVersion>
 		
-		<Description>Provides a mechanism to random chance or dice style roll checks for games or applications that need it</Description>
+		<Description>Provides a mechanism to check random chance or dice style roll checks for games or applications that need it</Description>
 		<PackageTags>OpenSourceKingdom, OpenSource, Petra, Game, Framework, Suite, Tool, random, dice, roll, check, chance, probability, luck</PackageTags>
 		<Title>OSK.Petra.Probabilities</Title>
 		<Authors>BlankDev117</Authors>

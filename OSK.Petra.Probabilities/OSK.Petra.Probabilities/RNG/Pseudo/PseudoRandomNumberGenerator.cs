@@ -1,6 +1,5 @@
 using OSK.Petra.Probabilities.Ports;
 using System;
-using System.Security.Cryptography;
 
 namespace OSK.Petra.Probabilities.RNG.Pseudo;
 
@@ -21,7 +20,7 @@ public class PseudoRandomNumberGenerator : IRandomNumberGenerator
     /// Creates a pseudo random generator using a randomly created seed
     /// </summary>
     public PseudoRandomNumberGenerator()
-        : this(RandomHelpers.CreateRandomSeed32())
+        : this(SeedHelpers.RandomSeed32())
     {
     }
 
@@ -64,7 +63,7 @@ public class PseudoRandomNumberGenerator : IRandomNumberGenerator
     }
 
     /// <inheritdoc/>
-    public int Next(int min, int max)
+    public int NextInteger(int min, int max)
     {
         if (min > max)
         {

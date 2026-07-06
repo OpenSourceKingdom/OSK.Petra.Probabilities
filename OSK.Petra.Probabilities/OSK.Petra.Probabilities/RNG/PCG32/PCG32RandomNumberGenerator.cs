@@ -1,8 +1,6 @@
-﻿using OSK.Petra.Probabilities.Ports;
-using OSK.Petra.Probabilities.RNG;
-using OSK.Petra.Probabilities.RNG.PCG32;
+﻿using OSK.Petra.Probabilities;
+using OSK.Petra.Probabilities.Ports;
 using System;
-using System.Runtime;
 
 /// <summary>
 /// A random number generator utilizing the PCG32 Algorithm
@@ -23,7 +21,7 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// Creates a PCG32 random generator using a randomly created seed state
     /// </summary>
     public PCG32RandomNumberGenerator()
-        : this(RandomHelpers.CreateLongRandomSeed64())
+        : this(SeedHelpers.RandomSeed64())
     {
     }
 
@@ -52,14 +50,24 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// <inheritdoc/>
     public double NextDouble(double min, double max)
     {
+        if (min > max)
+        {
+            throw new InvalidOperationException($"Unable to get a value between min and max because the min value '{min}' cannot be greater than the max '{max}'.");
+        }
+        if (min == max)
+        {
+            return min;
+        }
+
         var (updatedState, value) = NextUInt(State);
         State = updatedState;
 
-        return value / (double)uint.MaxValue;
+        var randomFraction = value / (double)uint.MaxValue;
+        return min + (randomFraction * (max - min));
     }
 
     /// <inheritdoc/>
-    public int Next(int min, int max)
+    public int NextInteger(int min, int max)
     {
         if (min > max)
         {

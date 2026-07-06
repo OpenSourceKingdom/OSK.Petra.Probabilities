@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System;
 using OSK.Petra.Probabilities.Internal.Services;
 using OSK.Petra.Probabilities.Ports;
 
