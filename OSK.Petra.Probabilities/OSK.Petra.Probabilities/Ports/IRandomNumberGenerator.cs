@@ -9,16 +9,16 @@ namespace OSK.Petra.Probabilities.Ports;
 public interface IRandomNumberGenerator
 {
     /// <summary>
-    /// Gets a random value between 0.0 and 1.0
+    /// Gets a random decimal value between min and max
     /// </summary>
     /// <returns>The value</returns>
-    double NextDouble();
+    double NextDouble(double min, double max);
 
     /// <summary>
-    /// Get a random value between min and max
+    /// Get a random integer value between min and max
     /// </summary>
-    /// <param name="minValue">The min value</param>
-    /// <param name="maxValue">The max value</param>
+    /// <param name="min">The min value</param>
+    /// <param name="max">The max value</param>
     /// <returns>A value between min/max inclusive</returns>
-    int Next(int minValue, int maxValue);
+    int Next(int min, int max);
 }

@@ -49,26 +49,37 @@ public class PseudoRandomNumberGenerator : IRandomNumberGenerator
     #region IRandomNumberGenerator
 
     /// <inheritdoc/>
-    public double NextDouble()
-        => _randomGenerator.NextDouble();
+    public double NextDouble(double min, double max)
+    {
+        if (min > max)
+        {
+            throw new ArgumentOutOfRangeException(nameof(min), $"Unable to get an integer value between min and max becasue the min value '{min}' can not be greater than the max '{max}.");
+        }
+        if (min == max)
+        {
+            return min;
+        }
+
+        return min + (_randomGenerator.NextDouble() * (max - min));
+    }
 
     /// <inheritdoc/>
-    public int Next(int minValue, int maxValue)
+    public int Next(int min, int max)
     {
-        if (minValue > maxValue)
+        if (min > max)
         {
-            throw new InvalidOperationException($"Unable to get a value between min and max becasue the min value '{minValue}' can not be greater than the max '{maxValue}.");
+            throw new InvalidOperationException($"Unable to get an integer value between min and max becasue the min value '{min}' can not be greater than the max '{max}.");
         }
-        if (minValue == maxValue)
+        if (min == max)
         {
-            return minValue;
+            return min;
         }
-        if (maxValue is int.MaxValue)
+        if (max is int.MaxValue)
         {
-            return _randomGenerator.Next(minValue, maxValue);
+            return _randomGenerator.Next(min, max);
         }
 
-        return _randomGenerator.Next(minValue, maxValue + 1);
+        return _randomGenerator.Next(min, max + 1);
     }
 
     /// <inheritdoc/>

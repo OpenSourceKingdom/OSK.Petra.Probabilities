@@ -5,31 +5,15 @@ using System;
 
 namespace OSK.Petra.Probabilities.Internal.Services;
 
-internal class ProbabilityRoller : IProbabilityRoller
+internal class ProbabilityRoller(IRandomNumberGenerator numberGenerator) : IProbabilityRoller
 {
-    #region Variables
-
-    private IRandomNumberGenerator _numberGenerator = new PseudoRandomNumberGenerator();
-
-    #endregion
-
     #region IProbabilityRoller
 
     public bool Chance(double probability)
-        => _numberGenerator.NextDouble() <= probability;
+        => numberGenerator.NextDouble() <= probability;
 
     public int Roll(int min, int max)
-        => _numberGenerator.Next(min, max);
-
-    public void Configure(IRandomNumberGenerator numberGenerator)
-    {
-        if (numberGenerator is null)
-        {
-            throw new ArgumentNullException(nameof(numberGenerator));
-        }
-
-        _numberGenerator = numberGenerator;
-    }
+        => numberGenerator.Next(min, max);
 
     #endregion
 }

@@ -4,6 +4,9 @@ using OSK.Petra.Probabilities.RNG.PCG32;
 using System;
 using System.Runtime;
 
+/// <summary>
+/// A random number generator utilizing the PCG32 Algorithm
+/// </summary>
 public class PCG32RandomNumberGenerator : IRandomNumberGenerator
 {
     #region Variables
@@ -20,12 +23,12 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// Creates a PCG32 random generator using a randomly created seed state
     /// </summary>
     public PCG32RandomNumberGenerator()
-        : this((RandomHelpers.CreateLongRandomSeed64() + Increment) * Multiplier + Increment)
+        : this(RandomHelpers.CreateLongRandomSeed64())
     {
     }
 
     /// <summary>
-    /// Creates a PCG32 random generator using a known seed
+    /// Creates a PCG32 random generator using a known state
     /// </summary>
     /// <param name="state">The state to set the generator with</param>
     public PCG32RandomNumberGenerator(ulong state)
@@ -37,6 +40,9 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
 
     #region Api
 
+    /// <summary>
+    /// The state for the current number generation.
+    /// </summary>
     public ulong State { get; set; }
 
     #endregion
@@ -44,7 +50,7 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     #region IRandomNumberGenerator
 
     /// <inheritdoc/>
-    public double NextDouble()
+    public double NextDouble(double min, double max)
     {
         var (updatedState, value) = NextUInt(State);
         State = updatedState;
@@ -53,18 +59,18 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     }
 
     /// <inheritdoc/>
-    public int Next(int minValue, int maxValue)
+    public int Next(int min, int max)
     {
-        if (minValue > maxValue)
+        if (min > max)
         {
-            throw new InvalidOperationException($"Unable to get a value between min and max because the min value '{minValue}' cannot be greater than the max '{maxValue}'.");
+            throw new InvalidOperationException($"Unable to get a value between min and max because the min value '{min}' cannot be greater than the max '{max}'.");
         }
-        if (minValue == maxValue)
+        if (min == max)
         {
-            return minValue;
+            return min;
         }
 
-        var range = (uint)(maxValue - minValue + 1);
+        var range = (uint)(max - min + 1);
         var limit = uint.MaxValue - (uint.MaxValue % range);
 
         uint result;
@@ -73,7 +79,7 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
             (State, result) = NextUInt(State);
         } while (result >= limit);
 
-        return minValue + (int)(result % range);
+        return min + (int)(result % range);
     }
 
     #endregion
