@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="OSK.Petra.Probabilities.UnitTests/OSK.Petra.Probabilities.UnitTests.csproj" />
+  <Project Path="OSK.Petra.Probabilities/OSK.Petra.Probabilities.csproj" />
+</Solution>
