@@ -8,5 +8,5 @@ public class ProbabilityState
     /// <summary>
     /// The state for the internal random number generator the roller was utilizing
     /// </summary>
-    public RandomNumberGeneratorState NumberGeneratorState { get; set; }
+    public required RandomNumberGeneratorState NumberGeneratorState { get; set; }
 }
