@@ -1,3 +1,4 @@
+using OSK.Petra.Probabilities.Models;
 using OSK.Petra.Probabilities.Ports;
 
 namespace OSK.Petra.Probabilities.Internal.Services;
@@ -5,6 +6,12 @@ namespace OSK.Petra.Probabilities.Internal.Services;
 internal class ProbabilityRoller(IRandomNumberGenerator numberGenerator) : IProbabilityRoller
 {
     #region IProbabilityRoller
+
+    public ProbabilityState GetState()
+        => new()
+        {
+            NumberGeneratorState = numberGenerator.GetState()
+        };
 
     public bool RollCheck(double minChance, double maxChance, double probabilityRequired)
         => numberGenerator.NextDouble(minChance, maxChance) >= probabilityRequired;

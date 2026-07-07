@@ -1,16 +1,13 @@
 ﻿using OSK.Petra.Probabilities.RNG.Pseudo;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OSK.Petra.Probabilities.UnitTests.RNG.Pseudo;
 
-public class PseudoRandomNumberGeneratorTests: DeterministicRandomNumberGeneratorTests<PseudoRandomNumberGenerator>
+public class SeededRandomNumberGeneratorTests: DeterministicRandomNumberGeneratorTests<SeededRandomNumberGenerator>
 {
 
     #region DeterministicRandomNumberGeneratorOverrides
 
-    protected override PseudoRandomNumberGenerator CreateDefaultGenerator()
+    protected override SeededRandomNumberGenerator CreateDefaultGenerator()
         => new(42);
 
     #endregion
@@ -21,7 +18,7 @@ public class PseudoRandomNumberGeneratorTests: DeterministicRandomNumberGenerato
     public void Constructor_WithoutSeed_InitializesGenerator()
     {
         // Arrange & Act
-        PseudoRandomNumberGenerator generator = new();
+        SeededRandomNumberGenerator generator = new();
 
         // Assert
         Assert.NotNull(generator);
@@ -35,7 +32,7 @@ public class PseudoRandomNumberGeneratorTests: DeterministicRandomNumberGenerato
         int seed = 12345;
 
         // Act
-        PseudoRandomNumberGenerator generator = new(seed);
+        SeededRandomNumberGenerator generator = new(seed);
 
         // Assert
         Assert.NotNull(generator);

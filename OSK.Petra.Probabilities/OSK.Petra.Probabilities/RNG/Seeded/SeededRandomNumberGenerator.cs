@@ -1,15 +1,18 @@
+using OSK.Petra.Probabilities.Models;
 using OSK.Petra.Probabilities.Ports;
 using System;
+using OSK.Petra.Probabilities.RNG.Seeded;
 
-namespace OSK.Petra.Probabilities.RNG.Pseudo;
+namespace OSK.Petra.Probabilities.RNG.Seeded;
 
 /// <summary>
 /// Creates a <see cref="IRandomNumberGenerator"/> that utilizes .NET Psuedo random
 /// </summary>
-public class PseudoRandomNumberGenerator : IRandomNumberGenerator
+public class SeededRandomNumberGenerator : IRandomNumberGenerator
 {
     #region Variables
 
+    private readonly int _seed;
     private readonly Random _randomGenerator;
 
     #endregion
@@ -19,7 +22,7 @@ public class PseudoRandomNumberGenerator : IRandomNumberGenerator
     /// <summary>
     /// Creates a pseudo random generator using a randomly created seed
     /// </summary>
-    public PseudoRandomNumberGenerator()
+    public SeededRandomNumberGenerator()
         : this(SeedHelpers.RandomSeed32())
     {
     }
@@ -28,24 +31,22 @@ public class PseudoRandomNumberGenerator : IRandomNumberGenerator
     /// Creates a pseudo random generator using a known seed
     /// </summary>
     /// <param name="seed">The seed to set the generator with</param>
-    public PseudoRandomNumberGenerator(int seed)
+    public SeededRandomNumberGenerator(int seed)
     {
-        Seed = seed;
+        _seed = seed;
         _randomGenerator = new(seed);
     }
 
     #endregion
 
-    #region Api
-
-    /// <summary>
-    /// The seed that started the generator
-    /// </summary>
-    public int Seed { get; }
-
-    #endregion
-
     #region IRandomNumberGenerator
+
+    /// <inheritdoc/>
+    public RandomNumberGeneratorState GetState()
+        => new SeededRandomState()
+        {
+            Seed = _seed
+        };
 
     /// <inheritdoc/>
     public double NextDouble(double min, double max)

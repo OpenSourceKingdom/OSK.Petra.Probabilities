@@ -1,10 +1,20 @@
+using OSK.Hexagonal.MetaData;
+using OSK.Petra.Probabilities.Models;
+
 namespace OSK.Petra.Probabilities.Ports;
 
 /// <summary>
 /// Provides random number generation for probabilities
 /// </summary>
+[HexagonalIntegration(HexagonalIntegrationType.LibraryProvided, HexagonalIntegrationType.ConsumerOptional, HexagonalIntegrationType.IntegrationOptional)]
 public interface IRandomNumberGenerator
 {
+    /// <summary>
+    /// Get the current state for the generator
+    /// </summary>
+    /// <returns>The current state data</returns>
+    RandomNumberGeneratorState GetState();
+
     /// <summary>
     /// Gets a random decimal value between min and max
     /// </summary>

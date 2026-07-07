@@ -1,9 +1,6 @@
 ﻿using Moq;
 using OSK.Petra.Probabilities.Internal.Services;
 using OSK.Petra.Probabilities.Ports;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OSK.Petra.Probabilities.UnitTests.Internal.Services;
 

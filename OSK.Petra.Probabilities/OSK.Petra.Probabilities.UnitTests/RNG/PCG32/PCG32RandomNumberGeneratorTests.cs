@@ -1,6 +1,4 @@
-﻿using OSK.Petra.Probabilities.RNG.Pseudo;
-
-namespace OSK.Petra.Probabilities.UnitTests.RNG.PCG32;
+﻿namespace OSK.Petra.Probabilities.UnitTests.RNG.PCG32;
 
 public class PCG32RandomNumberGeneratorTests: DeterministicRandomNumberGeneratorTests<PCG32RandomNumberGenerator>
 {

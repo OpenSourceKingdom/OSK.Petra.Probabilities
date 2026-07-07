@@ -1,5 +1,7 @@
 ﻿using OSK.Petra.Probabilities;
+using OSK.Petra.Probabilities.Models;
 using OSK.Petra.Probabilities.Ports;
+using OSK.Petra.Probabilities.RNG.PCG32;
 using System;
 
 /// <summary>
@@ -12,6 +14,8 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     // pcg32d_13_16's stream
     private const ulong Increment = 11634580027462358144;
     private const ulong Multiplier = 6364136223846793005;
+
+    private ulong _state;
 
     #endregion
 
@@ -31,21 +35,19 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// <param name="state">The state to set the generator with</param>
     public PCG32RandomNumberGenerator(ulong state)
     {
-        State = state;
+        _state = state;
     }
 
     #endregion
 
-    #region Api
-
-    /// <summary>
-    /// The state for the current number generation.
-    /// </summary>
-    public ulong State { get; set; }
-
-    #endregion
-
     #region IRandomNumberGenerator
+
+    /// <inheritdoc/>
+    public RandomNumberGeneratorState GetState()
+        => new PCG32RandomState()
+        {
+            StateValue = _state
+        };
 
     /// <inheritdoc/>
     public double NextDouble(double min, double max)
@@ -59,8 +61,8 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
             return min;
         }
 
-        var (updatedState, value) = NextUInt(State);
-        State = updatedState;
+        var (updatedState, value) = NextUInt(_state);
+        _state = updatedState;
 
         var randomFraction = value / (double)uint.MaxValue;
         return min + (randomFraction * (max - min));
@@ -84,7 +86,7 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
         uint result;
         do
         {
-            (State, result) = NextUInt(State);
+            (_state, result) = NextUInt(_state);
         } while (result >= limit);
 
         return min + (int)(result % range);
