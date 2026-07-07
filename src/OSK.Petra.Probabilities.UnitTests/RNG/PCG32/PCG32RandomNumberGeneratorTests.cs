@@ -1,4 +1,6 @@
-﻿namespace OSK.Petra.Probabilities.UnitTests.RNG.PCG32;
+﻿using OSK.Petra.Probabilities.RNG.PCG32;
+
+namespace OSK.Petra.Probabilities.UnitTests.RNG.PCG32;
 
 public class PCG32RandomNumberGeneratorTests: DeterministicRandomNumberGeneratorTests<PCG32RandomNumberGenerator>
 {
@@ -20,7 +22,7 @@ public class PCG32RandomNumberGeneratorTests: DeterministicRandomNumberGenerator
 
         // Assert
         Assert.NotNull(generator);
-        Assert.NotEqual(0UL, generator.State);
+        Assert.NotEqual(0UL, generator.GetState<PCG32RandomState>().StateValue);
     }
 
     [Fact]
@@ -34,7 +36,7 @@ public class PCG32RandomNumberGeneratorTests: DeterministicRandomNumberGenerator
 
         // Assert
         Assert.NotNull(generator);
-        Assert.Equal(state, generator.State);
+        Assert.Equal(state, generator.GetState<PCG32RandomState>().StateValue);
     }
 
     #endregion

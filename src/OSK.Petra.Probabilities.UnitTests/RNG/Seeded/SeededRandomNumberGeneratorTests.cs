@@ -1,4 +1,4 @@
-﻿using OSK.Petra.Probabilities.RNG.Pseudo;
+﻿using OSK.Petra.Probabilities.RNG.Seeded;
 
 namespace OSK.Petra.Probabilities.UnitTests.RNG.Pseudo;
 
@@ -22,7 +22,7 @@ public class SeededRandomNumberGeneratorTests: DeterministicRandomNumberGenerato
 
         // Assert
         Assert.NotNull(generator);
-        Assert.NotEqual(0, generator.Seed);
+        Assert.NotEqual(0, generator.GetState<SeededRandomState>().Seed);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class SeededRandomNumberGeneratorTests: DeterministicRandomNumberGenerato
 
         // Assert
         Assert.NotNull(generator);
-        Assert.Equal(seed, generator.Seed);
+        Assert.Equal(seed, generator.GetState<SeededRandomState>().Seed);
     }
 
     #endregion
