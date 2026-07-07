@@ -1,5 +1,5 @@
 ﻿using OSK.Petra.Probabilities.Ports;
-using OSK.Petra.Probabilities.RNG.Pseudo;
+using OSK.Petra.Probabilities.RNG.Seeded;
 
 namespace OSK.Petra.Probabilities;
 

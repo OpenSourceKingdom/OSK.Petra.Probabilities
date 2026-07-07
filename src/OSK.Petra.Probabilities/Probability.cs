@@ -1,6 +1,6 @@
 ﻿using OSK.Petra.Probabilities.Internal.Services;
 using OSK.Petra.Probabilities.Ports;
-using OSK.Petra.Probabilities.RNG.Pseudo;
+using OSK.Petra.Probabilities.RNG.Seeded;
 using System;
 
 namespace OSK.Petra.Probabilities;

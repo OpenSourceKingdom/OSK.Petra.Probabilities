@@ -9,9 +9,18 @@ namespace OSK.Petra.Probabilities;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
+    /// Adds random probability services to the container, with default probability configuration
+    /// </summary>
+    /// <param name="services">The service container to add the DI to</param>
+    /// <returns>The services for chaining</returns>
+    public static IServiceCollection AddProbabilities(this IServiceCollection services)
+        => services.AddProbabilities(_ => { });
+
+    /// <summary>
     /// Adds random probability services to the container
     /// </summary>
     /// <param name="services">The service container to add the DI to</param>
+    /// <param name="configurator">The configurator for setting up the probability related services</param>
     /// <returns>The services for chaining</returns>
     public static IServiceCollection AddProbabilities(this IServiceCollection services, Action<IProbabilityBuilder> configurator)
     {

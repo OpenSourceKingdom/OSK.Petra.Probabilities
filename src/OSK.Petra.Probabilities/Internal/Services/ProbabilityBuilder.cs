@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using OSK.Petra.Probabilities.Ports;
-using OSK.Petra.Probabilities.RNG.Pseudo;
+using OSK.Petra.Probabilities.RNG.Seeded;
 using System;
 
 namespace OSK.Petra.Probabilities.Internal.Services;
