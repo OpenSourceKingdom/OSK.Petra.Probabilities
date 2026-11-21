@@ -174,4 +174,98 @@ public class ProbabilityRollerTests
     }
 
     #endregion
+
+    #region RollDie
+
+    [Fact]
+    public void RollDie_ReturnsRolledValue()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+        mockRoller.Setup(m => m.Roll(1, 6)).Returns(4);
+
+        // Act
+        var result = mockRoller.Object.RollDie(6);
+
+        // Assert
+        Assert.Equal(4, result);
+        mockRoller.Verify(m => m.Roll(1, 6), Times.Once);
+    }
+
+    #endregion
+
+    #region RollDice
+
+    [Fact]
+    public void RollDice_SameSides_ReturnsAllRolledValues()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        mockRoller.SetupSequence(m => m.Roll(1, 6))
+            .Returns(2)
+            .Returns(5)
+            .Returns(3);
+
+        // Act
+        var result = mockRoller.Object.RollDice(6, 3);
+
+        // Assert
+        Assert.Equal([2, 5, 3], result);
+        mockRoller.Verify(m => m.Roll(1, 6), Times.Exactly(3));
+    }
+
+    [Fact]
+    public void RollDice_VaryingSides_ReturnsAllRolledValues()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        mockRoller.SetupSequence(m => m.Roll(1, It.IsAny<int>()))
+            .Returns(2)
+            .Returns(5)
+            .Returns(3);
+
+        // Act
+        var result = mockRoller.Object.RollDice([4, 6, 8]);
+
+        // Assert
+        Assert.Equal([2, 5, 3], result);
+
+        mockRoller.Verify(m => m.Roll(1, 4), Times.Once);
+        mockRoller.Verify(m => m.Roll(1, 6), Times.Once);
+        mockRoller.Verify(m => m.Roll(1, 8), Times.Once);
+    }
+
+    [Fact]
+    public void RollDice_EmptyCollection_ReturnsEmptyArray()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        // Act
+        var result = mockRoller.Object.RollDice([]);
+
+        // Assert
+        Assert.Empty(result);
+        mockRoller.Verify(m => m.Roll(
+            It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+    }
+
+    [Fact]
+    public void RollDice_ZeroDice_ReturnsEmptyArray()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        // Act
+        var result = mockRoller.Object.RollDice(6, 0);
+
+        // Assert
+        Assert.Empty(result);
+        mockRoller.Verify(m => m.Roll(
+            It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+    }
+
+    #endregion
 }
