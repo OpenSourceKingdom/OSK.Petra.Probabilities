@@ -5,21 +5,22 @@ namespace OSK.Petra.Probabilities;
 
 public static class RandomNumberGeneratorExtensions
 {
-    /// <summary>
-    /// Get a random double between 0.0 and 1.0
-    /// </summary>
-    /// <param name="numberGenerator">The number generator to use</param>
-    /// <returns>A random value</returns>
-    public static double NextDouble(this IRandomNumberGenerator numberGenerator)
-        => numberGenerator.NextDouble(0.0, 1.0);
+    extension(IRandomNumberGenerator numberGenerator)
+    {
+        /// <summary>
+        /// Gets a random double between 0.0 and 1.0.
+        /// </summary>
+        /// <returns>A random value.</returns>
+        public double NextDouble()
+            => numberGenerator.NextDouble(0.0, 1.0);
 
-    /// <summary>
-    /// Gets the state for the random number generator, casted to the specified type
-    /// </summary>
-    /// <typeparam name="TState">The type state</typeparam>
-    /// <param name="numberGenerator">The number generator to use</param>
-    /// <returns>The state, if cast is successful</returns>
-    public static TState GetState<TState>(this IRandomNumberGenerator numberGenerator)
-        where TState : RandomNumberGeneratorState
-        => (TState)numberGenerator.GetState();
+        /// <summary>
+        /// Gets the state for the random number generator, cast to the specified type.
+        /// </summary>
+        /// <typeparam name="TState">The type of state.</typeparam>
+        /// <returns>The state, if the cast is successful.</returns>
+        public TState GetState<TState>()
+            where TState : RandomNumberGeneratorState
+            => (TState)numberGenerator.GetState();
+    }
 }

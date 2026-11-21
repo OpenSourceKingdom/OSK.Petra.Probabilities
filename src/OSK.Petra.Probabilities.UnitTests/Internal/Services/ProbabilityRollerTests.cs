@@ -59,48 +59,118 @@ public class ProbabilityRollerTests
 
     #endregion
 
-    #region RollCheck
+    #region Chance
 
     [Fact]
-    public void RollCheck_ProbabilityTooLow_ReturnsFalse()
+    public void Chance_IntProbabilityTooLow_ReturnsFalse()
     {
         // Arrange
-        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
             .Returns(50);
 
         // Act
-        var result = _roller.RollCheck(0, 100, 75);
+        var result = _roller.Chance(25);
 
         // Assert
         Assert.False(result);
     }
 
     [Fact]
-    public void RollCheck_ProbabilityExactly_ReturnsTrue()
+    public void Chance_IntProbabilityExactly_ReturnsTrue()
     {
         // Arrange
-        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
             .Returns(50);
 
         // Act
-        var result = _roller.RollCheck(0, 100, 50);
+        var result = _roller.Chance(50);
 
         // Assert
         Assert.True(result);
     }
 
     [Fact]
-    public void RollCheck_ProbabilityExceeds_ReturnsTrue()
+    public void Chance_IntProbabilityExceeds_ReturnsTrue()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
+            .Returns(50);
+
+        // Act
+        var result = _roller.Chance(75);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleProbabilityTooLow_ReturnsFalse()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+            .Returns(0.5);
+
+        // Act
+        var result = _roller.Chance(0.25);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleProbabilityExactly_ReturnsTrue()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+            .Returns(0.5);
+
+        // Act
+        var result = _roller.Chance(0.5);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleProbabilityExceeds_ReturnsTrue()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+            .Returns(0.5);
+
+        // Act
+        var result = _roller.Chance(0.75);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_IntRange_ProbabilityThreshold_ReturnsExpectedResult()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
+            .Returns(50);
+
+        // Act
+        var result = _roller.Chance(0, 100, 75);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleRange_ProbabilityThreshold_ReturnsExpectedResult()
     {
         // Arrange
         _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
             .Returns(50);
 
         // Act
-        var result = _roller.RollCheck(0, 100, 25);
+        var result = _roller.Chance(0.0, 100.0, 25.0);
 
         // Assert
-        Assert.True(result);
+        Assert.False(result);
     }
 
     #endregion
