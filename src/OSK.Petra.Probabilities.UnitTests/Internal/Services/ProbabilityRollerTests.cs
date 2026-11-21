@@ -59,48 +59,212 @@ public class ProbabilityRollerTests
 
     #endregion
 
-    #region RollCheck
+    #region Chance
 
     [Fact]
-    public void RollCheck_ProbabilityTooLow_ReturnsFalse()
+    public void Chance_IntProbabilityTooLow_ReturnsFalse()
     {
         // Arrange
-        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
             .Returns(50);
 
         // Act
-        var result = _roller.RollCheck(0, 100, 75);
+        var result = _roller.Chance(25);
 
         // Assert
         Assert.False(result);
     }
 
     [Fact]
-    public void RollCheck_ProbabilityExactly_ReturnsTrue()
+    public void Chance_IntProbabilityExactly_ReturnsTrue()
     {
         // Arrange
-        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
             .Returns(50);
 
         // Act
-        var result = _roller.RollCheck(0, 100, 50);
+        var result = _roller.Chance(50);
 
         // Assert
         Assert.True(result);
     }
 
     [Fact]
-    public void RollCheck_ProbabilityExceeds_ReturnsTrue()
+    public void Chance_IntProbabilityExceeds_ReturnsTrue()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
+            .Returns(50);
+
+        // Act
+        var result = _roller.Chance(75);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleProbabilityTooLow_ReturnsFalse()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+            .Returns(0.5);
+
+        // Act
+        var result = _roller.Chance(0.25);
+
+        // Assert
+        Assert.False(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleProbabilityExactly_ReturnsTrue()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+            .Returns(0.5);
+
+        // Act
+        var result = _roller.Chance(0.5);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleProbabilityExceeds_ReturnsTrue()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
+            .Returns(0.5);
+
+        // Act
+        var result = _roller.Chance(0.75);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_IntRange_ProbabilityThreshold_ReturnsExpectedResult()
+    {
+        // Arrange
+        _mockRandomGenerator.Setup(m => m.NextInteger(It.IsAny<int>(), It.IsAny<int>()))
+            .Returns(50);
+
+        // Act
+        var result = _roller.Chance(0, 100, 75);
+
+        // Assert
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Chance_DoubleRange_ProbabilityThreshold_ReturnsExpectedResult()
     {
         // Arrange
         _mockRandomGenerator.Setup(m => m.NextDouble(It.IsAny<double>(), It.IsAny<double>()))
             .Returns(50);
 
         // Act
-        var result = _roller.RollCheck(0, 100, 25);
+        var result = _roller.Chance(0.0, 100.0, 25.0);
 
         // Assert
-        Assert.True(result);
+        Assert.False(result);
+    }
+
+    #endregion
+
+    #region RollDie
+
+    [Fact]
+    public void RollDie_ReturnsRolledValue()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+        mockRoller.Setup(m => m.Roll(1, 6)).Returns(4);
+
+        // Act
+        var result = mockRoller.Object.RollDie(6);
+
+        // Assert
+        Assert.Equal(4, result);
+        mockRoller.Verify(m => m.Roll(1, 6), Times.Once);
+    }
+
+    #endregion
+
+    #region RollDice
+
+    [Fact]
+    public void RollDice_SameSides_ReturnsAllRolledValues()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        mockRoller.SetupSequence(m => m.Roll(1, 6))
+            .Returns(2)
+            .Returns(5)
+            .Returns(3);
+
+        // Act
+        var result = mockRoller.Object.RollDice(6, 3);
+
+        // Assert
+        Assert.Equal([2, 5, 3], result);
+        mockRoller.Verify(m => m.Roll(1, 6), Times.Exactly(3));
+    }
+
+    [Fact]
+    public void RollDice_VaryingSides_ReturnsAllRolledValues()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        mockRoller.SetupSequence(m => m.Roll(1, It.IsAny<int>()))
+            .Returns(2)
+            .Returns(5)
+            .Returns(3);
+
+        // Act
+        var result = mockRoller.Object.RollDice([4, 6, 8]);
+
+        // Assert
+        Assert.Equal([2, 5, 3], result);
+
+        mockRoller.Verify(m => m.Roll(1, 4), Times.Once);
+        mockRoller.Verify(m => m.Roll(1, 6), Times.Once);
+        mockRoller.Verify(m => m.Roll(1, 8), Times.Once);
+    }
+
+    [Fact]
+    public void RollDice_EmptyCollection_ReturnsEmptyArray()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        // Act
+        var result = mockRoller.Object.RollDice([]);
+
+        // Assert
+        Assert.Empty(result);
+        mockRoller.Verify(m => m.Roll(
+            It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+    }
+
+    [Fact]
+    public void RollDice_ZeroDice_ReturnsEmptyArray()
+    {
+        // Arrange
+        var mockRoller = new Mock<IProbabilityRoller>();
+
+        // Act
+        var result = mockRoller.Object.RollDice(6, 0);
+
+        // Assert
+        Assert.Empty(result);
+        mockRoller.Verify(m => m.Roll(
+            It.IsAny<int>(), It.IsAny<int>()), Times.Never);
     }
 
     #endregion

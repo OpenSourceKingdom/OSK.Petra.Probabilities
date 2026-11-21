@@ -13,9 +13,6 @@ internal class ProbabilityRoller(IRandomNumberGenerator numberGenerator) : IProb
             NumberGeneratorState = numberGenerator.GetState()
         };
 
-    public bool RollCheck(double minChance, double maxChance, double probabilityRequired)
-        => numberGenerator.NextDouble(minChance, maxChance) >= probabilityRequired;
-
     public int Roll(int min, int max)
         => numberGenerator.NextInteger(min, max);
 

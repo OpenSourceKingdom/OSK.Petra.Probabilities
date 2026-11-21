@@ -15,15 +15,6 @@ public interface IProbabilityRoller
     ProbabilityState GetState();
 
     /// <summary>
-    /// Validates if the chance check succeeded
-    /// </summary>
-    /// <param name="minChance">The min chance value for success</param>
-    /// <param name="maxChance">The max chance value for success</param>
-    /// <param name="probabilityRequired">The probabilistic chance that a chance should succeed</param>
-    /// <returns>Whether the chance succeeded</returns>
-    bool RollCheck(double minChance, double maxChance, double probabilityRequired);
-
-    /// <summary>
     /// Randomly roll between the min and max values, inclusive
     /// </summary>
     /// <param name="min">The min value</param>
