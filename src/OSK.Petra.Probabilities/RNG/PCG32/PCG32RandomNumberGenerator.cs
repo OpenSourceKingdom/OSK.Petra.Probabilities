@@ -2,6 +2,7 @@
 using OSK.Petra.Probabilities.Models;
 using OSK.Petra.Probabilities.Ports;
 using OSK.Petra.Probabilities.RNG.PCG32;
+using OSK.Petra.Probabilities.RNG.Seeded;
 using System;
 
 /// <summary>
@@ -38,9 +39,28 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
         _state = state;
     }
 
+    /// <summary>
+    /// Creates a PCG32 from a state object directly
+    /// </summary>
+    /// <param name="state">The state to load</param>
+    /// <exception cref="ArgumentNullException">If state is null</exception>
+    public PCG32RandomNumberGenerator(PCG32RandomState state)
+    {
+        if (state is null)
+        {
+            throw new ArgumentNullException(nameof(state));
+        }
+
+        _state = state.StateValue;
+    }
+
     #endregion
 
     #region IRandomNumberGenerator
+
+    /// <inheritdoc/>
+    public IRandomNumberGenerator Clone()
+        => new PCG32RandomNumberGenerator(_state);
 
     /// <inheritdoc/>
     public RandomNumberGeneratorState GetState()

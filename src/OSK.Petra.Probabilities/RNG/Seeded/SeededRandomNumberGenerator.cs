@@ -11,7 +11,10 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
 {
     #region Variables
 
+    private readonly IterationMode? _iterationMode;
+    private long _iteration;
     private readonly int _seed;
+ 
     private readonly Random _randomGenerator;
 
     #endregion
@@ -21,8 +24,9 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
     /// <summary>
     /// Creates a pseudo random generator using a randomly created seed
     /// </summary>
-    public SeededRandomNumberGenerator()
-        : this(SeedHelpers.RandomSeed32())
+    /// <param name="options">Sets options to internal iteration tracking for state load</param>
+    public SeededRandomNumberGenerator(IterationOptions? options = null)
+        : this(SeedHelpers.RandomSeed32(), options)
     {
     }
 
@@ -30,10 +34,43 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
     /// Creates a pseudo random generator using a known seed
     /// </summary>
     /// <param name="seed">The seed to set the generator with</param>
-    public SeededRandomNumberGenerator(int seed)
+    /// <param name="options">Sets options to internal iteration tracking for state load</param>
+    public SeededRandomNumberGenerator(int seed, IterationOptions? options = null)
     {
         _seed = seed;
         _randomGenerator = new(seed);
+
+        _iterationMode = options?.IterationMode;
+    }
+
+    /// <summary>
+    /// loads the RNG with provided state
+    /// </summary>
+    /// <param name="state">The state to load</param>
+    /// <exception cref="ArgumentNullException">If state is null</exception>
+    public SeededRandomNumberGenerator(SeededRandomState state)
+    {
+        _seed = state?.Seed ?? throw new ArgumentNullException(nameof(state));
+        _randomGenerator = new(state.Seed);
+
+        if (state.IterationState is not null)
+        {
+            _iterationMode = state.IterationState.IterationMode;
+            _iteration = state.IterationState.Iteration;
+
+            for (int iteration = 0; iteration < state.IterationState.Iteration; iteration++)
+            {
+                switch (state.IterationState.IterationMode)
+                {
+                    case IterationMode.Integer:
+                        _randomGenerator.Next();
+                        break;
+                    case IterationMode.Double:
+                        _randomGenerator.NextDouble();
+                        break;
+                }
+            }
+        }
     }
 
     #endregion
@@ -41,10 +78,21 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
     #region IRandomNumberGenerator
 
     /// <inheritdoc/>
+    public IRandomNumberGenerator Clone()
+        => new SeededRandomNumberGenerator((SeededRandomState)GetState());
+
+    /// <inheritdoc/>
     public RandomNumberGeneratorState GetState()
         => new SeededRandomState()
         {
-            Seed = _seed
+            Seed = _seed,
+            IterationState = _iterationMode is null
+                ? null
+                : new()
+                {
+                    IterationMode = _iterationMode.Value,
+                    Iteration = _iteration
+                }
         };
 
     /// <inheritdoc/>
@@ -59,6 +107,10 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
             return min;
         }
 
+        if (_iterationMode is not null)
+        {
+            _iteration++;
+        }
         return min + (_randomGenerator.NextDouble() * (max - min));
     }
 
@@ -72,6 +124,11 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
         if (min == max)
         {
             return min;
+        }
+
+        if (_iterationMode is not null)
+        {
+            _iteration++;
         }
         if (max is int.MaxValue)
         {

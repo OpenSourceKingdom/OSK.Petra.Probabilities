@@ -7,6 +7,9 @@ internal class ProbabilityRoller(IRandomNumberGenerator numberGenerator) : IProb
 {
     #region IProbabilityRoller
 
+    public IProbabilityRoller Clone()
+        => new ProbabilityRoller(numberGenerator.Clone());
+
     public ProbabilityState GetState()
         => new()
         {
