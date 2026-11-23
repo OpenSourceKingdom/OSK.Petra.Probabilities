@@ -26,7 +26,7 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
     /// </summary>
     /// <param name="options">Sets options to internal iteration tracking for state load</param>
     public SeededRandomNumberGenerator(IterationOptions? options = null)
-        : this(SeedHelpers.RandomSeed32())
+        : this(SeedHelpers.RandomSeed32(), options)
     {
     }
 
@@ -79,7 +79,7 @@ public class SeededRandomNumberGenerator : IRandomNumberGenerator
 
     /// <inheritdoc/>
     public IRandomNumberGenerator Clone()
-        => new SeededRandomNumberGenerator(_seed);
+        => new SeededRandomNumberGenerator((SeededRandomState)GetState());
 
     /// <inheritdoc/>
     public RandomNumberGeneratorState GetState()
