@@ -25,7 +25,6 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// <summary>
     /// Creates a PCG32 random generator using a randomly created seed state
     /// </summary>
-    /// <param name="options">Determines whether an internal increment should be kept when a desire to load a close approximation of the internal seeded state exists</param>
     public PCG32RandomNumberGenerator()
         : this(SeedHelpers.RandomSeed64())
     {
