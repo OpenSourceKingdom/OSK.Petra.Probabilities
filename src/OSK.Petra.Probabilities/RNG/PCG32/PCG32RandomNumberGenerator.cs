@@ -2,6 +2,7 @@
 using OSK.Petra.Probabilities.Models;
 using OSK.Petra.Probabilities.Ports;
 using OSK.Petra.Probabilities.RNG.PCG32;
+using OSK.Petra.Probabilities.RNG.Seeded;
 using System;
 
 /// <summary>
@@ -24,9 +25,9 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// <summary>
     /// Creates a PCG32 random generator using a randomly created seed state
     /// </summary>
-    /// <param name="trackIterations">Determines whether an internal increment should be kept when a desire to load a close approximation of the internal seeded state exists</param>
-    public PCG32RandomNumberGenerator(bool trackIterations = false)
-        : this(SeedHelpers.RandomSeed64(), trackIterations)
+    /// <param name="options">Determines whether an internal increment should be kept when a desire to load a close approximation of the internal seeded state exists</param>
+    public PCG32RandomNumberGenerator()
+        : this(SeedHelpers.RandomSeed64())
     {
     }
 
@@ -34,10 +35,24 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// Creates a PCG32 random generator using a known state
     /// </summary>
     /// <param name="state">The state to set the generator with</param>
-    /// <param name="trackIterations">Determines whether an internal increment should be kept when a desire to load a close approximation of the internal seeded state exists</param>
-    public PCG32RandomNumberGenerator(ulong state, bool trackIterations = false)
+    public PCG32RandomNumberGenerator(ulong state)
     {
         _state = state;
+    }
+
+    /// <summary>
+    /// Creates a PCG32 from a state object directly
+    /// </summary>
+    /// <param name="state">The state to load</param>
+    /// <exception cref="ArgumentNullException">If state is null</exception>
+    public PCG32RandomNumberGenerator(PCG32RandomState state)
+    {
+        if (state is null)
+        {
+            throw new ArgumentNullException(nameof(state));
+        }
+
+        _state = state.StateValue;
     }
 
     #endregion

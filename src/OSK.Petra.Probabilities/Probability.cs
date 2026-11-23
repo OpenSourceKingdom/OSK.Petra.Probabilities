@@ -34,7 +34,7 @@ public static class Probability
         where TGenerator: IRandomNumberGenerator
         where TState: RandomNumberGeneratorState
     {
-        _stateRngTypeLookup[typeof(TGenerator)] = typeof(TState);
+        _stateRngTypeLookup[typeof(TState)] = typeof(TGenerator);
     }
 
     #endregion
