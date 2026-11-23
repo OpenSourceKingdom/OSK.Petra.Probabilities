@@ -10,6 +10,12 @@ namespace OSK.Petra.Probabilities.Ports;
 public interface IProbabilityRoller
 {
     /// <summary>
+    /// Creates a roller using identical state as the current roller, but separated so rolls don't impact the original
+    /// </summary>
+    /// <returns>The new probability roller based on similar state</returns>
+    IProbabilityRoller Clone();
+
+    /// <summary>
     /// The probability state that can be used to restore the probability roller
     /// </summary>
     ProbabilityState GetState();

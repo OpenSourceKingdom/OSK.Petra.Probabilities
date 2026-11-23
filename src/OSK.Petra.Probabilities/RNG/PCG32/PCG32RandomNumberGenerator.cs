@@ -24,8 +24,9 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// <summary>
     /// Creates a PCG32 random generator using a randomly created seed state
     /// </summary>
-    public PCG32RandomNumberGenerator()
-        : this(SeedHelpers.RandomSeed64())
+    /// <param name="trackIterations">Determines whether an internal increment should be kept when a desire to load a close approximation of the internal seeded state exists</param>
+    public PCG32RandomNumberGenerator(bool trackIterations = false)
+        : this(SeedHelpers.RandomSeed64(), trackIterations)
     {
     }
 
@@ -33,7 +34,8 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     /// Creates a PCG32 random generator using a known state
     /// </summary>
     /// <param name="state">The state to set the generator with</param>
-    public PCG32RandomNumberGenerator(ulong state)
+    /// <param name="trackIterations">Determines whether an internal increment should be kept when a desire to load a close approximation of the internal seeded state exists</param>
+    public PCG32RandomNumberGenerator(ulong state, bool trackIterations = false)
     {
         _state = state;
     }
@@ -41,6 +43,10 @@ public class PCG32RandomNumberGenerator : IRandomNumberGenerator
     #endregion
 
     #region IRandomNumberGenerator
+
+    /// <inheritdoc/>
+    public IRandomNumberGenerator Clone()
+        => new PCG32RandomNumberGenerator(_state);
 
     /// <inheritdoc/>
     public RandomNumberGeneratorState GetState()

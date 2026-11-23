@@ -10,6 +10,12 @@ namespace OSK.Petra.Probabilities.Ports;
 public interface IRandomNumberGenerator
 {
     /// <summary>
+    /// Creates a generator using identical state as the current roller, but separated so rolls don't impact the original
+    /// </summary>
+    /// <returns>The new generator based on similar state</returns>
+    IRandomNumberGenerator Clone();
+
+    /// <summary>
     /// Get the current state for the generator
     /// </summary>
     /// <returns>The current state data</returns>
